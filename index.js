@@ -1,24 +1,24 @@
 var express = require('express');
 var app = express();
-var port = 3000;
+var port = 3001;
+const password = 'alfabeta';
+var URL = `mongodb+srv://neotech:${password}@cluster0.iuyvy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+var mongoose = require('mongoose');
 
-
-
-
-app.listen(port, ()=> {
-    console.log('Servidor esta corriendo');
-})
-// respond with "hello world" when a GET request is made to the homepage
-app.get('/hello', function(req, res) {
-        res.send({
-            users: [
-                {
-                "id": 1,
-                "email": "george.bluth@reqres.in",
-                "first_name": "George",
-                "last_name": "Bluth",
-                "avatar": "https://reqres.in/img/faces/1-image.jpg"
-                },
-            ]
+(async function connect() {
+    try {
+        await mongoose.connect(URL);
+        console.log('\x1b[36m Connected to MongoDB \x1b[37m');
+        app.listen(port, () => {
+            console.log(`\x1b[33m Server escuchando en puerto: ${port} \x1b[37m`);
         });
+    }
+    catch(err) 
+    {
+        console.log('\x1b[31m Error al conectar con MongoDB \x1b[37m');
+    }
+})()
+
+app.get('/', function(req, res) {
+    res.send("El servidor esta respondiendo correctamente");
 });
