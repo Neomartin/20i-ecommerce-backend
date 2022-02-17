@@ -1,6 +1,5 @@
-var express = require('express');
-var app = express();
-var port = 3001;
+var app = require('./app')
+var port = 3000;
 const password = 'alfabeta';
 var URL = `mongodb+srv://neotech:${password}@cluster0.iuyvy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 var mongoose = require('mongoose');
@@ -19,6 +18,3 @@ var mongoose = require('mongoose');
     }
 })()
 
-app.get('/', function(req, res) {
-    res.send("El servidor esta respondiendo correctamente");
-});
