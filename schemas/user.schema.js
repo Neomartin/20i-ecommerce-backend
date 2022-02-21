@@ -1,10 +1,10 @@
-const Mongoose = require("mongoose")
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-var Schema = Mongoose.Schema;
 var UserSchema = new Schema({
-    fullName: {type: String},
-    email: {type: String},
-    password: {type: String},
+    fullName: { type: String },
+    email: { type: String },
+    password: { type: String }
 });
 
-module.exports = Mongoose.model('User', UserSchema)
+module.exports = mongoose.model('User', UserSchema)
