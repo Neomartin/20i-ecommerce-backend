@@ -23,11 +23,23 @@ async function getUser(req, res) {
     return res.status(200).send({ user: user });
 }
 
+async function updateUser(req, res) {
+    const id = req.params.upd_id;
+
+    const userChangesToApply = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(id, userChangesToApply, { new: true });
+    if(!updatedUser) return res.status(404).send('No se encontro el usuario');
+    
+    return res.status(200).send(updatedUser)
+}
+
 
 module.exports = {
     addUser,
     getUsers,
-    getUser
+    getUser,
+    updateUser
 }
 
 // fetch(`localhost:3000/api/user/?user_id=${id}`)
