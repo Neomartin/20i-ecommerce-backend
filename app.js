@@ -1,15 +1,11 @@
 var express = require('express');
 var app = express();
-var userController = require('./controllers/user.controller');
+var user_routes = require('./routes/user.routes')
 
 app.use(express.json()); // Función para poder leer los valores enviados en métodos post mediante el body
 app.use(express.urlencoded({extended: true}));
+app.use('/api',[user_routes])
 
-app.get('/api/users', userController.getUsers);
-app.post('/api/user', userController.addUser);
-app.delete('api/user', userController.deleteUser);
-
-app.get('/api/user', userController.getUser);
 
 
 //fetch (`localhost:3000/api/user/?user_id`)

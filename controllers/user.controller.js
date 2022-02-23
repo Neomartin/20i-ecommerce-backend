@@ -12,9 +12,9 @@ async function getUsers(req, res) {
 }
 async function getUser(req,res){
     //ID que recibicomo como un query param desde el endpoint
-    const UserId = req.query.user_id;
+    const userId = req.query.user_id;
     //buscamos especificamente ese id en nuestra colleccion de users
-     const user = await User.findById(UserId);
+     const user = await User.findById(userId);
      if(!user) return res.status(404).send('No se encuntro el usuario que busca')
      // const id = req.params.user_id
     return res.status(200).send({user: user});
@@ -24,7 +24,15 @@ async function deleteUser(req,res){
     const userDelete = await User.findByIdAndDelete(UserIdDelete);
      if(!userDelete) return res.status(404).send('No se encuntro el usuario que desea borrar')
 
-    return res.status(200).send(`El usuario ${userDelete} ha sido borrado correctamente`);
+    return res.status(200).send(`El usuario ${userDelete.email} ha sido borrado correctamente`);
+}
+async function updateUser(req,res){
+    const id = req.params.upd_id;
+    const userChanges = req.body;
+    const updatedUser = await user.findByIdAndUpdate(id, userChanges, {new: true})
+    if(!updatedUser) return res.status(404).send('No se encuntro el usuario que desea modificar')
+    return res.status(200).send(updatedUser);
+
 }
 
 module.exports = {
@@ -32,4 +40,5 @@ module.exports = {
     getUsers,
     getUser,
     deleteUser,
+    updateUser,
 }
