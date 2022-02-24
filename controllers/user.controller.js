@@ -1,38 +1,80 @@
 var User = require('../schemas/user.schema');
+var bcrypt = require('bcrypt')
+var salt = 10
 
-function addUser(req, res) {
+async function addUser(req, res) {
+    try {
+        console.log(req.body)
+        if (!req.body.password || !req.body.fullName || req.body.email) {
+            return res.status(400).send('Falta un campo obligatorio')
+        }
+    }
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    return res.status(202).send(hashedPassword);
     let newUser = new User(req.body);
-    newUser.save()
-    res.send({ usuarioNuevo: newUser })    
+    await newUser.save();
+    res.send({
+        usuarioNuevo: newUser
+    });
+
+    catch(error){
+        res.status(404).send(error)
+    }
 }
 
 async function getUsers(req, res) {
     const usuariosDB = await User.find()
-    res.send({ users: usuariosDB })
+    res.send({
+        users: usuariosDB
+    })
 }
-async function getUser(req,res){
+async function getUser(req, res) {
     //ID que recibicomo como un query param desde el endpoint
     const userId = req.query.user_id;
     //buscamos especificamente ese id en nuestra colleccion de users
-     const user = await User.findById(userId);
-     if(!user) return res.status(404).send('No se encuntro el usuario que busca')
-     // const id = req.params.user_id
-    return res.status(200).send({user: user});
-} 
-async function deleteUser(req,res){
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).send('No se encuntro el usuario que busca')
+    // const id = req.params.user_id
+    return res.status(200).send({
+        user: user
+    });
+}
+async function deleteUser(req, res) {
     const UserIdDelete = req.query.user_id_delete;
     const userDelete = await User.findByIdAndDelete(UserIdDelete);
-     if(!userDelete) return res.status(404).send('No se encuntro el usuario que desea borrar')
+    if (!userDelete) return res.status(404).send('No se encuntro el usuario que desea borrar')
 
     return res.status(200).send(`El usuario ${userDelete.email} ha sido borrado correctamente`);
 }
-async function updateUser(req,res){
+async function updateUser(req, res) {
     const id = req.params.upd_id;
     const userChanges = req.body;
-    const updatedUser = await user.findByIdAndUpdate(id, userChanges, {new: true})
-    if(!updatedUser) return res.status(404).send('No se encuntro el usuario que desea modificar')
+    const updatedUser = await user.findByIdAndUpdate(id, userChanges, {
+        new: true
+    })
+    if (!updatedUser) return res.status(404).send('No se encuntro el usuario que desea modificar')
     return res.status(200).send(updatedUser);
 
+}
+
+async function login(req, res){
+    try{
+        const email = req.body.email;
+        const password = req.body.password;
+        const userDB = await User.findOne({email: req.body.email})
+        if(!userDB) return res.status(404).send({msg:'El usuario no existe en nuestra base de datos'});
+        const isValidPassword = bcrypt.compare(password, userDB.password);
+        if(!isValidPassword) return res.status(401).send({msg: 'Alguno de los datos no es correcto'})
+
+        userDB.password = undefined
+        return res.status(200).send({
+            ok: true,
+            msg:'Login correcto',
+            user: UserDB,
+        })
+    } catch(error){
+        res.status(400).send(error)
+    }
 }
 
 module.exports = {
@@ -41,4 +83,5 @@ module.exports = {
     getUser,
     deleteUser,
     updateUser,
+    login
 }
