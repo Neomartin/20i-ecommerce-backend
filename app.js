@@ -8,7 +8,7 @@ app.use(express.urlencoded({extended: true}));
 app.use('/api', [
     user_rotes,
     product_routes,
-    orders_routes,
+    // orders_routes,
 ]);
 
 module.exports = app;

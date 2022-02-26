@@ -6,7 +6,8 @@ api.get('/users', userController.getUsers);
 api.post('/user', userController.addUser);
 api.get('/user', userController.getUser);
 api.put('/user/:upd_id', userController.updateUser);
-
+api.delete('/user', userController.deleteUser);
+api.post('/login', userController.login);
 
 module.exports = api;
 
