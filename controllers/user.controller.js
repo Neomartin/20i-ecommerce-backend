@@ -56,13 +56,13 @@ async function login(req, res){
     try{
         const email = req.body.email;
         const password = req.body.password;
-        const userDB = await User.findOne({email: req.body.email})
+        const userDB = await User.findOne({email: req.body.email});
         if(!userDB) return res.status(404).send({msg:'El usuario no existe en nuestra base de datos'});
         const isValidPassword = await bcrypt.compare(password, userDB.password);
-        if(!isValidPassword) return res.status(401).send({msg: 'Alguno de los datos no es correcto'})
-
+        if(!isValidPassword) return res.status(401).send({msg: 'Alguno de los datos no es correcto'});
+        console.log(userDB)
         userDB.password = undefined;
-        
+        console.log(userDB)
         return res.status(200).send({
             ok: true,
             msg:'Login correcto',
