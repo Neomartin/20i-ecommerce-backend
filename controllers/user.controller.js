@@ -5,17 +5,15 @@ var salt = 10
 async function addUser(req, res) {
     try {
         console.log(req.body)
-        if (!req.body.password || !req.body.fullName || req.body.email) {
+        if (!req.body.password || !req.body.fullName || !req.body.email) {
             return res.status(400).send({error:'Falta un campo obligatorio'})
         }
-        const hashedPassword = await bcrypt.hash(req.body.password, salt);
-        return res.status(202).send(hashedPassword);
-    }
+        req.body.password = await bcrypt.hash(req.body.password, salt);
+    
     let newUser = new User(req.body);
-    await newUser.save();
-    res.send({
-        usuarioNuevo = newUser, 
-    }) catch(error){
+    await newUser.save()
+    res.send({usuarioNuevo : newUser})
+} catch(error){
         res.status(404).send(error)
     }
 }
@@ -61,7 +59,7 @@ async function login(req, res){
         const password = req.body.password;
         const userDB = await User.findOne({email: req.body.email})
         if(!userDB) return res.status(404).send({msg:'El usuario no existe en nuestra base de datos'});
-        const isValidPassword = bcrypt.compare(password, userDB.password);
+        const isValidPassword = await bcrypt.compare(password, userDB.password);
         if(!isValidPassword) return res.status(401).send({msg: 'Alguno de los datos no es correcto'})
 
         userDB.password = undefined
