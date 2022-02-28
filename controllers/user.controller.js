@@ -44,11 +44,10 @@ async function deleteUser(req, res) {
 }
 async function updateUser(req, res) {
     const id = req.params.upd_id;
-    const userChanges = req.body;
-    const updatedUser = await user.findByIdAndUpdate(id, userChanges, {
-        new: true
-    })
-    if (!updatedUser) return res.status(404).send('No se encuntro el usuario que desea modificar')
+    const userChangesToApply = req.body;
+    const updatedUser = await user.findByIdAndUpdate(id, userChangesToApply, {
+        new: true});
+    if (!updatedUser) return res.status(404).send('No se encuntro el usuario que desea modificar');
     return res.status(200).send(updatedUser);
 
 }
@@ -62,7 +61,8 @@ async function login(req, res){
         const isValidPassword = await bcrypt.compare(password, userDB.password);
         if(!isValidPassword) return res.status(401).send({msg: 'Alguno de los datos no es correcto'})
 
-        userDB.password = undefined
+        userDB.password = undefined;
+        
         return res.status(200).send({
             ok: true,
             msg:'Login correcto',
