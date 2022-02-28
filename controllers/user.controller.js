@@ -6,18 +6,16 @@ async function addUser(req, res) {
     try {
         console.log(req.body)
         if (!req.body.password || !req.body.fullName || req.body.email) {
-            return res.status(400).send('Falta un campo obligatorio')
+            return res.status(400).send({error:'Falta un campo obligatorio'})
         }
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        return res.status(202).send(hashedPassword);
     }
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    return res.status(202).send(hashedPassword);
     let newUser = new User(req.body);
     await newUser.save();
     res.send({
-        usuarioNuevo: newUser
-    });
-
-    catch(error){
+        usuarioNuevo = newUser, 
+    }) catch(error){
         res.status(404).send(error)
     }
 }
