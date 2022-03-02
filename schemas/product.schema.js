@@ -11,21 +11,52 @@ var Categories = [
     'LIMPIEZA',
     'PERFUMERIA',
     'GENERAL',
-    ];
-    var ivaOptions = [
-        21,
-        12,
-        0,
-        ];
+];
+var ivaOptions = [
+    21,
+    10.5,
+    0,
+];
 
 var ProductSchema = new Schema({
-    name: {type:String, required: true, maxlength:50},
-    description: {type:String, maxlength: 200},
-    price:{type:Number, required: true},
-    stock: {type:Boolean, required: false},
-    category_id: {type: String, required: true, default:'GENERAL', enum: Categories,},
-    cod:{type:String, ref:'codigo', maxlength:4, minlength:4},
-    iva: { type: String, required: true, default:21, enum: ivaOptions, },
+    // ** Obligatorio
+    name: {
+        type: String,
+        required: true,
+        maxlength: 50
+    },
+    description: {
+        type: String,
+        maxlength: 200
+    },
+    // ** Obligatorio
+    price: {
+        type: Number,
+        required: true
+    },
+    // ** Obligatorio
+    stock: {
+        type: Boolean,
+        required: false
+    },
+    category_id: {
+        type: String,
+        required: true,
+        default: 'GENERAL',
+        enum: Categories,
+    },
+    cod: {
+        type: String,
+        // ref: 'codigo',
+        maxlength: 4,
+        minlength: 4
+    },
+    iva: {
+        type: String,
+        required: true,
+        default: 21,
+        enum: ivaOptions,
+    },
 })
 
 module.exports = mongoose.model('Product', ProductSchema)

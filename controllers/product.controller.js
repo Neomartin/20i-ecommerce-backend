@@ -3,11 +3,12 @@ var Product = require('../schemas/product.schema');
 async function addProduct(req, res) {
     try {
         console.log(req.body)
-        if (!req.body.name || !req.body.price || !req.body.cod) {
+        if (!req.body.name || !req.body.price || !req.body.stock) {
             return res.status(400).send({error:'Falta un campo obligatorio'})
         }
     
     let newProduct = new Product(req.body);
+    console.log(newProduct)
     await newProduct.save()
     res.send({productoNuevo : newProduct})
 } catch(error){
@@ -42,7 +43,7 @@ async function deleteProduct(req, res) {
 async function updateProduct(req, res) {
     const id = req.params.upd_id;
     const productChangesToApply = req.body;
-    const updatedProduct = await user.findByIdAndUpdate(id, productChangesToApply, {
+    const updatedProduct = await Product.findByIdAndUpdate(id, productChangesToApply, {
         new: true});
         console.log(updateProduct)
     if (!updatedProduct) return res.status(404).send('No se encuntro el Producto que desea modificar');
