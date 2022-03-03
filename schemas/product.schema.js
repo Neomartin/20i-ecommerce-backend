@@ -19,7 +19,6 @@ var ivaOptions = [
 ];
 
 var ProductSchema = new Schema({
-    // ** Obligatorio
     name: {
         type: String,
         required: true,
@@ -29,12 +28,10 @@ var ProductSchema = new Schema({
         type: String,
         maxlength: 200
     },
-    // ** Obligatorio
     price: {
         type: Number,
         required: true
     },
-    // ** Obligatorio
     stock: {
         type: Boolean,
         required: false
@@ -57,6 +54,8 @@ var ProductSchema = new Schema({
         default: 21,
         enum: ivaOptions,
     },
+    createdAt: { type: Date, required: true, default: Date.now },
+    updatedAt: { type: Date }
 })
 
 module.exports = mongoose.model('Product', ProductSchema)
