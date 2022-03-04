@@ -55,7 +55,8 @@ var ProductSchema = new Schema({
         enum: ivaOptions,
     },
     createdAt: { type: Date, required: true, default: Date.now },
-    updatedAt: { type: Date }
+    updatedAt: { type: Date },
+    clientId: { type: String, ref: 'User', required: true }
 })
 
 module.exports = mongoose.model('Product', ProductSchema)
