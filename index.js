@@ -1,7 +1,9 @@
 var app = require('./app')
 var port = 3000;
-const password = 'alfabeta';
-var URL = `mongodb+srv://neotech:${password}@cluster0.iuyvy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+
+const password = 'P4n4m4-1';
+var URL = `mongodb+srv://IRoldan:${password}@cluster0.2dowp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+
 var mongoose = require('mongoose');
 
 (async function connect() {
@@ -17,4 +19,3 @@ var mongoose = require('mongoose');
         console.log('\x1b[31m Error al conectar con MongoDB \x1b[37m');
     }
 })()
-
