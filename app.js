@@ -14,9 +14,4 @@ app.use('/api',[
     product_routes
 ]);
 
-
-
-
-//fetch (`localhost:3000/api/user/?user_id`)
-
 module.exports = app;

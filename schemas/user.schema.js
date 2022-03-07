@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+
 var rolesValidos = [
 'ADMIN_ROLE',
 'USER_ROLE',
@@ -16,7 +17,9 @@ var UserSchema = new Schema ({
         street_number: { type: Number },
     },
     active: { type: Boolean, default: false },
+
     role: { type: String, required: true, default:'USER_ROLE', enum: rolesValidos, },
 });
 
 module.exports = mongoose.model('User', UserSchema)
+

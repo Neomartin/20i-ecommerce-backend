@@ -1,10 +1,13 @@
 var User = require('../schemas/user.schema');
+
 var bcrypt = require('bcrypt')
 var salt = 10
+
 
 async function addUser(req, res) {
     try {
         console.log(req.body)
+
         if (!req.body.password || !req.body.fullName || !req.body.email) {
             return res.status(400).send({error:'Falta un campo obligatorio'})
         }
@@ -15,11 +18,13 @@ async function addUser(req, res) {
     res.send({usuarioNuevo : newUser})
 } catch(error){
         res.status(404).send(error)
+
     }
 }
 
 async function getUsers(req, res) {
     const usuariosDB = await User.find()
+
     res.send({
         users: usuariosDB
     })
@@ -73,11 +78,14 @@ async function login(req, res){
     }
 }
 
+
 module.exports = {
     addUser,
     getUsers,
     getUser,
+
     deleteUser,
     updateUser,
     login
 }
+
