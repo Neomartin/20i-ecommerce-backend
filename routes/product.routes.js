@@ -1,13 +1,14 @@
 var express = require('express');
 var api = express.Router();
-var userController = require('../controllers/user.controller');
 
-// api.get('/products', userController.getUsers);
-// api.post('/user', userController.addUser);
-// api.get('/user', userController.getUser);
-// api.put('/user/:upd_id', userController.updateUser);
-// api.delete('/user', userController.deleteUser);
-// api.post('/login', userController.login);
+var productController = require('../controllers/product.controller');
+
+api.post('/product', productController.addProduct);
+api.get('/products', productController.getProducts);
+api.get('/product', productController.getProduct);
+api.delete('/product/', productController.deleteProduct);
+api.put('/product/:upd_id', productController.updateProduct);
+
 
 module.exports = api;
 
