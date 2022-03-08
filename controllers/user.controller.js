@@ -1,7 +1,8 @@
-var User = require('../schemas/user.schema');
-
-var bcrypt = require('bcrypt')
-var salt = 10
+const User = require('../schemas/user.schema');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const secret = require('../config/config').secret
+const salt = 10;
 
 
 async function addUser(req, res) {
@@ -41,6 +42,8 @@ async function getUser(req, res) {
     });
 }
 async function deleteUser(req, res) {
+    
+
     const UserIdDelete = req.query.user_id_delete;
     const userDelete = await User.findByIdAndDelete(UserIdDelete);
     if (!userDelete) return res.status(404).send('No se encuntro el usuario que desea borrar')
@@ -61,19 +64,29 @@ async function login(req, res){
     try{
         const email = req.body.email;
         const password = req.body.password;
+        // Checkeamos de que el usuario exista y nos traemos internamente sus datos
         const userDB = await User.findOne({email});
         if(!userDB) return res.status(404).send({msg:'El usuario no existe en nuestra base de datos'});
+        // Comparamos password proveniente del front con el password del usuario
         const isValidPassword = await bcrypt.compare(password, userDB.password);
         if(!isValidPassword) return res.status(401).send({msg: 'Alguno de los datos no es correcto'});
         console.log(userDB)
+
+        // Elimino del objeto user el password
         userDB.password = undefined;
         console.log(userDB)
+
+        // Generamos un token de acceso
+        const token = jwt.sign(userDB.toJSON(), secret)
+
         return res.status(200).send({
             ok: true,
             msg:'Login correcto',
             user: userDB,
+            token
         })
     } catch(error){
+        console.log(error)
         res.status(400).send(error)
     }
 }
