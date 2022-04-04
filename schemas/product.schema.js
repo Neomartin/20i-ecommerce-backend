@@ -34,7 +34,7 @@ var ProductSchema = new Schema({
     },
     stock: {
         type: Boolean,
-        required: false
+        default: true
     },
     category_id: {
         type: String,
@@ -56,7 +56,8 @@ var ProductSchema = new Schema({
     },
     createdAt: { type: Date, required: true, default: Date.now },
     updatedAt: { type: Date },
-    clientId: { type: String, ref: 'User', required: true }
+    clientId: { type: String, ref: 'User' }
+
 })
 
 module.exports = mongoose.model('Product', ProductSchema)

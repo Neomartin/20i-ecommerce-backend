@@ -77,7 +77,7 @@ async function login(req, res){
         console.log(userDB)
 
         // Generamos un token de acceso
-        const token = jwt.sign(userDB.toJSON(), secret)
+        const token = jwt.sign(userDB.toJSON(), secret, { expiresIn: 30 })
 
         return res.status(200).send({
             ok: true,

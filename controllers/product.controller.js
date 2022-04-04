@@ -3,8 +3,8 @@ var Product = require('../schemas/product.schema');
 async function addProduct(req, res) {
     try {
         console.log(req.body)
-        if (!req.body.name || !req.body.price || !req.body.stock) {
-            return res.status(400).send({error:'Falta un campo obligatorio'})
+        if (!req.body.name || !req.body.price) { //remover error
+            return res.status(400).send({message:'Falta un campo obligatorio'})
         }
     
     let newProduct = new Product(req.body);
@@ -12,6 +12,7 @@ async function addProduct(req, res) {
     await newProduct.save()
     res.send({productoNuevo : newProduct})
 } catch(error){
+    console.log(error)
         res.status(404).send(error)
     }
 };
@@ -22,15 +23,10 @@ async function getProducts(req, res) {
 
     // Si el valor de req.query.page no viene (undefined) arranca desde el valor 0, ahora si viene un valor y tomando como referencia los indices de array, la segunda página (index 1 en un array "segundo elemento") al multiplicar 1* 5 = 5 entonces salteo los primero elementos.
     const itemsToSkip = req.query.page * 5;
-
+    
     // const searchParams = req.query;
-    const searchParams = req.query.name ? 
-        {name: 
-            { '$regex': req.query.name, 
-            '$options': 'i'
-            }
-        } :
-        {}
+    const searchParams = req.query.name ? {name: new RegExp(req.query.name, 'i')} : {}
+
         // Destructurar array, si se que mi array devuelve una cantidad fija de elementos puedo definir un array del lado derecho en el que por indice inicializo una variable con nombre referida a el valor que tiene el array declarado a la derecha de su mismo index
         // **Equivalente
         // const productosDB = result[0]
@@ -39,7 +35,8 @@ async function getProducts(req, res) {
         Product.find(searchParams)
         .populate('clientId')
         // para ordenar basados en alguna propiedad si color el nombre y el valor 1 (ordenamiento ascendente) y -1 (ordenamiento descendente)
-        .sort({ name: -1 })
+        .collation({locale: "es" })
+        .sort({ name: -1, price: 1 })
         // skip: Cantidad de documentos que voy a saltear en la búsqueda (a partir del cuál voy a buscar)
         .skip(itemsToSkip)
         // limit: Limite de elementos que voy a traer de la DB por consulta

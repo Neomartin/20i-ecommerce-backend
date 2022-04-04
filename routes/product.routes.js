@@ -9,6 +9,5 @@ api.get('/product', productController.getProduct);
 api.delete('/product/', productController.deleteProduct);
 api.put('/product/:upd_id', productController.updateProduct);
 
-
 module.exports = api;
 
